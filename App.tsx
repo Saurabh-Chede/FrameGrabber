@@ -34,7 +34,8 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="h-screen w-screen bg-black flex flex-col font-sans text-zinc-100 overflow-hidden">
+    // Changed h-screen to h-[100dvh] to fix mobile address bar issue
+    <div className="h-[100dvh] w-screen bg-black flex flex-col font-sans text-zinc-100 overflow-hidden">
       
       {/* HEADER */}
       <header className="h-14 lg:h-16 shrink-0 bg-zinc-950/80 backdrop-blur-md border-b border-zinc-800 flex items-center justify-between px-4 lg:px-6 relative z-50">
@@ -147,11 +148,11 @@ const App: React.FC = () => {
       </main>
 
       {/* Mobile Bottom Navigation */}
-      <div className="lg:hidden bg-zinc-950 border-t border-zinc-800 shrink-0 pb-safe">
+      <div className="lg:hidden bg-zinc-950 border-t border-zinc-800 shrink-0 pb-[env(safe-area-inset-bottom)] z-50 relative shadow-[0_-4px_20px_rgba(0,0,0,0.5)]">
         <div className="grid grid-cols-3 h-14">
           <button 
             onClick={() => setActiveTab('studio')}
-            className={`flex flex-col items-center justify-center gap-1 transition-colors ${
+            className={`flex flex-col items-center justify-center gap-1 transition-colors active:bg-zinc-900 ${
               activeTab === 'studio' ? 'text-orange-500' : 'text-zinc-500 hover:text-zinc-300'
             }`}
           >
@@ -161,7 +162,7 @@ const App: React.FC = () => {
 
           <button 
             onClick={() => setActiveTab('editor')}
-            className={`flex flex-col items-center justify-center gap-1 transition-colors ${
+            className={`flex flex-col items-center justify-center gap-1 transition-colors active:bg-zinc-900 ${
               activeTab === 'editor' ? 'text-orange-500' : 'text-zinc-500 hover:text-zinc-300'
             }`}
           >
@@ -171,7 +172,7 @@ const App: React.FC = () => {
 
           <button 
             onClick={() => setActiveTab('gallery')}
-            className={`flex flex-col items-center justify-center gap-1 transition-colors ${
+            className={`flex flex-col items-center justify-center gap-1 transition-colors active:bg-zinc-900 ${
               activeTab === 'gallery' ? 'text-orange-500' : 'text-zinc-500 hover:text-zinc-300'
             }`}
           >

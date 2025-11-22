@@ -3,6 +3,11 @@
 @tailwind utilities;
 
 @layer base {
+  html, body {
+    height: 100%;
+    height: 100dvh; /* Use dynamic viewport height */
+  }
+
   /* Custom scrollbar for Black/Orange theme */
   ::-webkit-scrollbar {
     width: 6px;
