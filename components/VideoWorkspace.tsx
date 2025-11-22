@@ -242,8 +242,8 @@ export const VideoWorkspace: React.FC = () => {
   return (
     <div className="flex flex-col w-full h-full bg-transparent overflow-hidden">
       
-      {/* TOP 60%: Video / Upload */}
-      <div className="relative bg-black w-full h-[60%] shrink-0 flex items-center justify-center group overflow-hidden border-b border-zinc-800">
+      {/* TOP 50%: Video / Upload */}
+      <div className="relative bg-black w-full h-[50%] shrink-0 flex items-center justify-center group overflow-hidden border-b border-zinc-800">
         {!videoMeta ? (
           <div className="text-center p-8 z-10 animate-fade-in flex flex-col items-center">
             <button 
@@ -287,8 +287,8 @@ export const VideoWorkspace: React.FC = () => {
         />
       </div>
 
-      {/* BOTTOM 40%: Controls + Shortcuts */}
-      <div className="h-[40%] flex flex-col min-h-0 bg-zinc-900/20">
+      {/* BOTTOM 50%: Controls + Shortcuts */}
+      <div className="h-[50%] flex flex-col min-h-0 bg-zinc-900/20">
         
         {/* Controls (Only visible when video is loaded) */}
         {videoMeta && (
