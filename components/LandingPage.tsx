@@ -107,26 +107,6 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLaunch }) => {
             </button>
         </div>
 
-        {/* Social Proof / Feature Strip */}
-        <div className="mt-12 sm:mt-20 pt-8 sm:pt-10 border-t border-white/5 w-full max-w-4xl flex flex-wrap justify-center gap-x-6 sm:gap-x-12 gap-y-4 sm:gap-y-6 text-zinc-600 grayscale opacity-70">
-            <div className="flex items-center gap-2">
-                <Icons.Check className="w-4 h-4 sm:w-5 sm:h-5" />
-                <span className="text-xs sm:text-sm font-bold tracking-tight">No Uploads</span>
-            </div>
-            <div className="flex items-center gap-2">
-                <Icons.Check className="w-4 h-4 sm:w-5 sm:h-5" />
-                <span className="text-xs sm:text-sm font-bold tracking-tight">4K Support</span>
-            </div>
-            <div className="flex items-center gap-2">
-                <Icons.Check className="w-4 h-4 sm:w-5 sm:h-5" />
-                <span className="text-xs sm:text-sm font-bold tracking-tight">Frame Exact</span>
-            </div>
-            <div className="flex items-center gap-2">
-                <Icons.Check className="w-4 h-4 sm:w-5 sm:h-5" />
-                <span className="text-xs sm:text-sm font-bold tracking-tight">Local Processing</span>
-            </div>
-        </div>
-
       </main>
     </div>
   );
