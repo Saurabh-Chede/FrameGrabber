@@ -1,5 +1,5 @@
 {
-  "name": " FrameGrabber",
+  "name": "FrameGrabber",
   "description": "A powerful video tool that allows users to extract high-quality screenshots from videos. Features a split-pane workflow for efficient frame capture and a responsive gallery layout.",
   "requestFramePermissions": []
 }
