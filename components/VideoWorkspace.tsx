@@ -241,8 +241,9 @@ export const VideoWorkspace: React.FC = () => {
   
   return (
     <div className="flex flex-col w-full h-full bg-transparent overflow-hidden">
-      {/* Video Player Area - Fixed Aspect on Desktop, but flexible enough */}
-      <div className="relative bg-black w-full aspect-video lg:shrink-0 flex items-center justify-center group overflow-hidden border-b border-zinc-800">
+      
+      {/* TOP 60%: Video / Upload */}
+      <div className="relative bg-black w-full h-[60%] shrink-0 flex items-center justify-center group overflow-hidden border-b border-zinc-800">
         {!videoMeta ? (
           <div className="text-center p-8 z-10 animate-fade-in flex flex-col items-center">
             <button 
@@ -286,11 +287,12 @@ export const VideoWorkspace: React.FC = () => {
         />
       </div>
 
-      {/* Controls & Tools & Extras - Scrollable Container */}
-      <div className="flex-1 flex flex-col min-h-0 overflow-y-auto">
+      {/* BOTTOM 40%: Controls + Shortcuts */}
+      <div className="h-[40%] flex flex-col min-h-0 bg-zinc-900/20">
         
+        {/* Controls (Only visible when video is loaded) */}
         {videoMeta && (
-          <>
+          <div className="shrink-0 flex flex-col bg-zinc-900/30">
             {/* Performant Scrubber */}
             <div 
               className="h-1.5 bg-zinc-800 cursor-pointer group/scrubber relative w-full overflow-hidden shrink-0"
@@ -309,7 +311,7 @@ export const VideoWorkspace: React.FC = () => {
             </div>
 
             {/* Transport Controls */}
-            <div className="px-3 py-2 flex items-center justify-between border-b border-zinc-800 bg-zinc-900/30 shrink-0">
+            <div className="px-3 py-2 flex items-center justify-between border-b border-zinc-800">
                <div className="flex items-center gap-1">
                   <button onClick={togglePlay} className="p-2 hover:bg-zinc-800 rounded-md text-zinc-200 hover:text-white transition-colors">
                      {isPlaying ? <Icons.Pause className="w-4 h-4 fill-current" /> : <Icons.Play className="w-4 h-4 fill-current" />}
@@ -344,34 +346,26 @@ export const VideoWorkspace: React.FC = () => {
                  </button>
                </div>
             </div>
-          </>
-        )}
 
-        {/* Capture Tools */}
-        <div className="p-4 space-y-4 shrink-0">
-          {videoMeta ? (
-            <div className="grid grid-cols-2 gap-3">
+            {/* Capture Tools */}
+            <div className="p-3 grid grid-cols-2 gap-3 border-b border-zinc-800/50 bg-zinc-900/10">
               <button
                 onClick={captureFrame}
-                className="col-span-2 h-11 bg-zinc-100 hover:bg-white text-black font-bold transition-all flex items-center justify-center gap-2 active:scale-[0.98] rounded-lg shadow-sm"
+                className="col-span-1 h-9 bg-zinc-100 hover:bg-white text-black font-bold transition-all flex items-center justify-center gap-2 active:scale-[0.98] rounded-lg shadow-sm text-xs"
               >
-                <Icons.Camera className="w-4 h-4" />
-                Take Snapshot <span className="hidden xl:inline text-zinc-400 font-normal text-[10px] border border-zinc-300 px-1 rounded ml-1">S</span>
+                <Icons.Camera className="w-3.5 h-3.5" />
+                Snapshot <span className="hidden xl:inline text-zinc-400 font-normal text-[10px] border border-zinc-300 px-1 rounded ml-1">S</span>
               </button>
 
-              <div className={`col-span-2 p-2.5 rounded-lg border transition-all flex items-center gap-2 ${
+              <div className={`col-span-1 h-9 px-2 rounded-lg border transition-all flex items-center gap-2 ${
                 isAutoCapturing ? 'bg-orange-900/10 border-orange-500/30' : 'bg-zinc-950/50 border-zinc-800'
               }`}>
-                 <div className="bg-zinc-900 p-1.5 rounded border border-zinc-800">
-                   <Icons.Timer className={`w-4 h-4 ${isAutoCapturing ? 'text-orange-500' : 'text-zinc-500'}`} />
-                 </div>
-                 
                  <div className="flex-1">
                    <select 
                      disabled={isAutoCapturing}
                      value={captureIntervalMs}
                      onChange={(e) => setCaptureIntervalMs(Number(e.target.value))}
-                     className="w-full bg-transparent text-xs font-bold text-zinc-300 focus:outline-none cursor-pointer"
+                     className="w-full bg-transparent text-[10px] font-bold text-zinc-300 focus:outline-none cursor-pointer"
                    >
                      {intervals.map(int => (
                        <option key={int.value} value={int.value}>Every {int.label}</option>
@@ -381,29 +375,25 @@ export const VideoWorkspace: React.FC = () => {
 
                  <button
                     onClick={() => setIsAutoCapturing(!isAutoCapturing)}
-                    className={`h-8 px-3 font-bold text-[10px] uppercase tracking-wider rounded transition-all ${
+                    className={`h-6 px-2 font-bold text-[9px] uppercase tracking-wider rounded transition-all ${
                       isAutoCapturing 
-                        ? 'bg-red-500 text-white hover:bg-red-600' 
-                        : 'bg-zinc-800 text-zinc-300 hover:bg-zinc-700'
+                        ? 'bg-red-500 text-white' 
+                        : 'bg-zinc-800 text-zinc-300'
                     }`}
                  >
                     {isAutoCapturing ? 'Stop' : 'Auto'}
                  </button>
               </div>
             </div>
-          ) : (
-            <div className="h-40 flex items-center justify-center text-zinc-700 text-xs font-bold uppercase tracking-wider animate-pulse">
-               Waiting for video...
-            </div>
-          )}
-        </div>
+          </div>
+        )}
 
-        {/* Studio Extras Panel - Fills Empty Space */}
-        <div className="flex-1 flex flex-col border-t border-zinc-800/50 bg-zinc-900/20 min-h-[200px]">
-           <div className="flex items-center border-b border-zinc-800/50 px-2">
+        {/* Studio Extras Panel - Fills remaining space */}
+        <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
+           <div className="flex items-center border-b border-zinc-800/50 px-2 bg-zinc-900/30 shrink-0">
               <button 
                 onClick={() => setActiveHelperTab('shortcuts')}
-                className={`px-3 py-2.5 text-[10px] font-bold uppercase tracking-wider border-b-2 transition-colors ${
+                className={`px-3 py-2 text-[10px] font-bold uppercase tracking-wider border-b-2 transition-colors ${
                    activeHelperTab === 'shortcuts' ? 'border-orange-500 text-zinc-100' : 'border-transparent text-zinc-500 hover:text-zinc-300'
                 }`}
               >
@@ -411,7 +401,7 @@ export const VideoWorkspace: React.FC = () => {
               </button>
               <button 
                 onClick={() => setActiveHelperTab('recent')}
-                className={`px-3 py-2.5 text-[10px] font-bold uppercase tracking-wider border-b-2 transition-colors ${
+                className={`px-3 py-2 text-[10px] font-bold uppercase tracking-wider border-b-2 transition-colors ${
                    activeHelperTab === 'recent' ? 'border-orange-500 text-zinc-100' : 'border-transparent text-zinc-500 hover:text-zinc-300'
                 }`}
               >
