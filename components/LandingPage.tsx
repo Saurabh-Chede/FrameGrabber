@@ -107,6 +107,12 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLaunch }) => {
             </button>
         </div>
 
+        <div className="mt-16 opacity-40 hover:opacity-100 transition-opacity duration-500 relative z-10">
+                <p className="text-[10px] text-zinc-500 font-mono tracking-widest">
+                    PRESS <span className="border border-zinc-700 px-1.5 py-0.5 rounded bg-zinc-900 text-zinc-300">SPACE</span> TO PLAY &bull; <span className="border border-zinc-700 px-1.5 py-0.5 rounded bg-zinc-900 text-zinc-300">S</span> TO SNAPSHOT
+                </p>
+            </div>
+
       </main>
     </div>
   );
