@@ -20,12 +20,12 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLaunch }) => {
   }, []);
 
   return (
-    <div className=" w-full bg-zinc-950 text-zinc-100 flex flex-col font-sans selection:bg-orange-900 selection:text-orange-100 overflow-x-hidden">
+    <div className="h-[100dvh] w-full bg-zinc-950 text-zinc-100 flex flex-col font-sans selection:bg-orange-900 selection:text-orange-100 overflow-x-hidden overflow-y-auto">
       
       {/* Navigation */}
-      <nav className="w-full max-w-7xl mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between relative z-50">
+      <nav className="w-full max-w-7xl mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between relative z-50 shrink-0">
         <div className="flex items-center gap-2 sm:gap-3">
-            <div className="relative group">
+            <div className="relative group cursor-pointer" onClick={onLaunch}>
                 <div className="absolute inset-0 bg-orange-500 blur-lg opacity-20 group-hover:opacity-40 transition-opacity rounded-full"></div>
                 <div className="relative bg-gradient-to-br from-orange-500 to-red-600 p-1.5 sm:p-2 rounded-lg border border-white/10">
                     <Icons.Camera className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
@@ -58,13 +58,13 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLaunch }) => {
       </nav>
 
       {/* Hero Section */}
-      <main className="flex flex-col items-center justify-center px-4 sm:px-6 pb-12 sm:pb-20 text-center relative w-full max-w-[100vw]">
+      <main className="flex-1 flex flex-col items-center justify-center px-4 sm:px-6 pb-12 sm:pb-20 text-center relative w-full max-w-[100vw]">
         
         {/* Background Gradients */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] sm:w-[600px] sm:h-[600px] lg:w-[800px] lg:h-[800px] bg-orange-600/10 blur-[60px] sm:blur-[100px] lg:blur-[120px] rounded-full pointer-events-none"></div>
 
         {/* Badge */}
-        <div className="mb-6 sm:mb-8 animate-fade-in">
+        <div className="mb-6 sm:mb-8 animate-fade-in relative z-10">
             <div className="inline-flex items-center gap-2 bg-zinc-900/80 border border-zinc-800 rounded-full pl-1 pr-3 py-1 hover:border-orange-500/30 transition-colors cursor-default backdrop-blur-sm">
                 <div className="bg-zinc-800 rounded-full px-2 py-0.5">
                     <span className="text-[9px] sm:text-[10px] font-bold text-white uppercase tracking-wide">Privacy First</span>
@@ -108,13 +108,13 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLaunch }) => {
         </div>
 
         <div className="mt-16 opacity-40 hover:opacity-100 transition-opacity duration-500 relative z-10">
-                <p className="text-[10px] text-zinc-500 font-mono tracking-widest">
-                    PRESS <span className="border border-zinc-700 px-1.5 py-0.5 rounded bg-zinc-900 text-zinc-300">SPACE</span> TO PLAY &bull; <span className="border border-zinc-700 px-1.5 py-0.5 rounded bg-zinc-900 text-zinc-300">S</span> TO SNAPSHOT
-                </p>
-            </div>
+            <p className="text-[10px] text-zinc-500 font-mono tracking-widest">
+                PRESS <span className="border border-zinc-700 px-1.5 py-0.5 rounded bg-zinc-900 text-zinc-300">SPACE</span> TO PLAY &bull; <span className="border border-zinc-700 px-1.5 py-0.5 rounded bg-zinc-900 text-zinc-300">S</span> TO SNAPSHOT
+            </p>
+        </div>
       </main>
 
-      <footer className="border-t border-zinc-900 bg-zinc-950 py-16 relative z-20">
+      <footer className="border-t border-zinc-900 bg-zinc-950 py-16 relative z-20 shrink-0">
          <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
             
             <div className="flex flex-col gap-4 w-full md:w-auto">
