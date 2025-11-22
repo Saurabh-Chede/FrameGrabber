@@ -297,8 +297,8 @@ export const VideoWorkspace: React.FC = () => {
   
   return (
     <div className="flex flex-col w-full h-full bg-transparent overflow-hidden">
-      {/* Video Player Area - Fixed Aspect on Desktop, but flexible enough */}
-      <div className="relative bg-black w-full aspect-video lg:shrink-0 flex items-center justify-center group overflow-hidden border-b border-zinc-800">
+      {/* Video Player Area - Flexible when no video, fixed aspect when video present */}
+      <div className={`relative bg-black w-full ${videoMeta ? 'aspect-video lg:shrink-0' : 'flex-1'} flex items-center justify-center group overflow-hidden border-b border-zinc-800`}>
         {!videoMeta ? (
           <div className="text-center p-8 z-10 animate-fade-in flex flex-col items-center max-w-md w-full">
             {/* File Upload Section */}
