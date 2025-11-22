@@ -254,6 +254,7 @@ export const VideoWorkspace: React.FC = () => {
         const videoTrack = stream.getVideoTracks()[0];
         const captureVideo = document.createElement('video');
         captureVideo.srcObject = stream;
+        captureVideo.muted = true;
         captureVideo.play(); // Start playing stream to get data
 
         // Wait for stream to provide a frame
@@ -264,20 +265,52 @@ export const VideoWorkspace: React.FC = () => {
         // Tiny delay to ensure frame is rendered
         await new Promise(r => setTimeout(r, 200));
 
-        const canvas = document.createElement('canvas');
-        canvas.width = captureVideo.videoWidth;
-        canvas.height = captureVideo.videoHeight;
-        const ctx = canvas.getContext('2d');
+        // --- CROPPING LOGIC TO GET ONLY THE PLAYER ---
+        const playerElement = document.getElementById('youtube-player');
         
-        if (ctx) {
-            ctx.drawImage(captureVideo, 0, 0);
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+
+        if (playerElement && ctx) {
+            const rect = playerElement.getBoundingClientRect();
+            
+            // Calculate scale based on stream width vs window width (handles DPI scaling)
+            const streamWidth = captureVideo.videoWidth;
+            const windowWidth = window.innerWidth;
+            
+            // If user shares "This Tab", stream usually matches viewport (scaled by DPR)
+            const scale = streamWidth / windowWidth;
+            
+            // Calculate crop coordinates
+            const cropX = Math.max(0, rect.left * scale);
+            const cropY = Math.max(0, rect.top * scale);
+            const cropW = Math.min(streamWidth - cropX, rect.width * scale);
+            const cropH = Math.min(captureVideo.videoHeight - cropY, rect.height * scale);
+
+            // Set canvas to the specific crop size
+            canvas.width = cropW;
+            canvas.height = cropH;
+
+            // Draw only the player portion
+            ctx.drawImage(
+                captureVideo, 
+                cropX, cropY, cropW, cropH, // Source Crop
+                0, 0, canvas.width, canvas.height // Destination
+            );
+
             canvas.toBlob((blob) => {
                if (blob) {
-                  // YouTube players often have letterboxing in the stream, 
-                  // but we capture the full stream resolution here.
                   addScreenshot(blob, currentTime, canvas.width, canvas.height);
                }
             }, 'image/png');
+        } else {
+            // Fallback if element not found (rare)
+             canvas.width = captureVideo.videoWidth;
+             canvas.height = captureVideo.videoHeight;
+             ctx?.drawImage(captureVideo, 0, 0);
+             canvas.toBlob((blob) => {
+                if (blob) addScreenshot(blob, currentTime, canvas.width, canvas.height);
+             }, 'image/png');
         }
 
         // Cleanup
