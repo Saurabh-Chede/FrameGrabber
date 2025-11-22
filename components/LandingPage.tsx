@@ -144,10 +144,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLaunch }) => {
                 </div>
                 <div className="flex flex-col gap-4">
                     <h4 className="text-sm font-bold text-zinc-100 uppercase tracking-wider">Connect</h4>
-                    <a href="https://github.com/Saurabh-Chede/FrameGrabber" target="_blank" className="text-zinc-400 hover:text-orange-500 text-sm transition-colors flex items-center gap-2">
+                    <a href="https://github.com/Saurabh-Chede" target="_blank" className="text-zinc-400 hover:text-orange-500 text-sm transition-colors flex items-center gap-2">
                         <Icons.Github className="w-4 h-4" /> GitHub
                     </a>
-                    <a href="https://twitter.com" target="_blank" className="text-zinc-400 hover:text-orange-500 text-sm transition-colors flex items-center gap-2">
+                    <a href="https://x.com/Saurabh_Chede_" target="_blank" className="text-zinc-400 hover:text-orange-500 text-sm transition-colors flex items-center gap-2">
                         <Icons.Twitter className="w-4 h-4" /> Twitter
                     </a>
                 </div>
