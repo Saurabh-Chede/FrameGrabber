@@ -80,9 +80,10 @@ export const ScreenshotDetail: React.FC = () => {
     return () => observer.disconnect();
   }, [isCropping, cropRatio, containerSize]);
 
-  // Global Drag Handling (Window level)
+  // Global Drag Handling (Window level - Mouse & Touch)
   useEffect(() => {
     const handleGlobalMouseUp = () => setIsDragging(false);
+    const handleGlobalTouchEnd = () => setIsDragging(false);
     
     const handleGlobalMouseMove = (e: MouseEvent) => {
         if (isDragging) {
@@ -93,15 +94,34 @@ export const ScreenshotDetail: React.FC = () => {
           });
         }
     };
+
+    const handleGlobalTouchMove = (e: TouchEvent) => {
+        if (isDragging && e.touches.length === 1) {
+           // Prevent default to stop scrolling while dragging
+           if (e.cancelable) e.preventDefault();
+           
+           const touch = e.touches[0];
+           setPan({
+              x: touch.clientX - dragStart.current.x,
+              y: touch.clientY - dragStart.current.y
+          });
+        }
+    };
     
     if (isDragging) {
         window.addEventListener('mouseup', handleGlobalMouseUp);
         window.addEventListener('mousemove', handleGlobalMouseMove);
+        
+        // Add active: false to allow preventDefault for touch events
+        window.addEventListener('touchend', handleGlobalTouchEnd);
+        window.addEventListener('touchmove', handleGlobalTouchMove, { passive: false });
     }
     
     return () => {
         window.removeEventListener('mouseup', handleGlobalMouseUp);
         window.removeEventListener('mousemove', handleGlobalMouseMove);
+        window.removeEventListener('touchend', handleGlobalTouchEnd);
+        window.removeEventListener('touchmove', handleGlobalTouchMove);
     };
   }, [isDragging]);
 
@@ -137,6 +157,15 @@ export const ScreenshotDetail: React.FC = () => {
       setIsDragging(true);
       // Store the offset between mouse and current pan position
       dragStart.current = { x: e.clientX - pan.x, y: e.clientY - pan.y };
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+      if (e.touches.length === 1) {
+          setIsDragging(true);
+          const touch = e.touches[0];
+          // Store the offset between touch and current pan position
+          dragStart.current = { x: touch.clientX - pan.x, y: touch.clientY - pan.y };
+      }
   };
 
   const handleResetCrop = () => {
@@ -312,9 +341,10 @@ export const ScreenshotDetail: React.FC = () => {
                     {/* The container centers the crop box */}
                     <div 
                         ref={cropBoxRef}
-                        className="relative border-2 border-white shadow-[0_0_0_9999px_rgba(0,0,0,0.75)] z-10 overflow-hidden transition-all duration-300"
+                        className="relative border-2 border-white shadow-[0_0_0_9999px_rgba(0,0,0,0.75)] z-10 overflow-hidden transition-all duration-300 touch-none"
                         style={cropBoxStyle}
                         onMouseDown={handleMouseDown}
+                        onTouchStart={handleTouchStart}
                     >
                         {/* Grid Lines */}
                         <div className="absolute inset-0 flex flex-col pointer-events-none opacity-50 z-20">
@@ -383,8 +413,9 @@ export const ScreenshotDetail: React.FC = () => {
             ) : (
                 // --- STANDARD VIEWER ---
                 <div 
-                    className="relative w-full h-full flex items-center justify-center cursor-grab active:cursor-grabbing"
+                    className="relative w-full h-full flex items-center justify-center cursor-grab active:cursor-grabbing touch-none"
                     onMouseDown={handleMouseDown}
+                    onTouchStart={handleTouchStart}
                 >
                     <img 
                         src={screenshot.url} 
