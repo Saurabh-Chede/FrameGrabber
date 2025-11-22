@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Icons } from './icons';
 
 interface LandingPageProps {
@@ -6,6 +6,19 @@ interface LandingPageProps {
 }
 
 export const LandingPage: React.FC<LandingPageProps> = ({ onLaunch }) => {
+  const [starCount, setStarCount] = useState<number | null>(null);
+
+  useEffect(() => {
+    fetch('https://api.github.com/repos/Saurabh-Chede/FrameGrabber')
+      .then((res) => res.json())
+      .then((data) => {
+        if (typeof data.stargazers_count === 'number') {
+          setStarCount(data.stargazers_count);
+        }
+      })
+      .catch((err) => console.error('Failed to fetch GitHub stars:', err));
+  }, []);
+
   return (
     <div className="min-h-[100dvh] w-full bg-zinc-950 text-zinc-100 flex flex-col font-sans selection:bg-orange-900 selection:text-orange-100 overflow-x-hidden">
       
@@ -22,11 +35,18 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLaunch }) => {
         </div>
 
         <div className="flex items-center gap-3 sm:gap-4">
-            <div className="hidden sm:flex items-center gap-1 text-xs font-bold text-zinc-500 hover:text-zinc-300 transition-colors cursor-pointer">
+            <a 
+                href="https://github.com/Saurabh-Chede/FrameGrabber"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hidden sm:flex items-center gap-1 text-xs font-bold text-zinc-500 hover:text-zinc-300 transition-colors cursor-pointer"
+            >
                 <Icons.Github className="w-4 h-4" />
                 <span>Star on GitHub</span>
-                <span className="bg-zinc-800 text-zinc-300 px-1.5 py-0.5 rounded ml-1">276</span>
-            </div>
+                <span className="bg-zinc-800 text-zinc-300 px-1.5 py-0.5 rounded ml-1 min-w-[2rem] text-center">
+                    {starCount !== null ? starCount : '...'}
+                </span>
+            </a>
             <button 
                 onClick={onLaunch}
                 className="bg-orange-500 hover:bg-orange-600 text-black text-[10px] sm:text-xs font-bold uppercase tracking-wider px-4 py-2 sm:px-5 sm:py-2.5 rounded-full transition-all flex items-center gap-2 group"
