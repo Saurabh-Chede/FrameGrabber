@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import { VideoWorkspace } from './components/VideoWorkspace';
 import { ScreenshotGallery } from './components/ScreenshotGallery';
 import { ScreenshotDetail } from './components/ScreenshotDetail';
+import { LandingPage } from './components/LandingPage';
 import { Icons } from './components/icons';
 import { useAppStore } from './store/useAppStore';
 
 type Tab = 'studio' | 'editor' | 'gallery';
 
 const App: React.FC = () => {
+  const [hasLaunched, setHasLaunched] = useState(false);
   const [showClearConfirm, setShowClearConfirm] = useState(false);
   const [activeTab, setActiveTab] = useState<Tab>('studio');
   
@@ -33,6 +35,10 @@ const App: React.FC = () => {
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
+  if (!hasLaunched) {
+    return <LandingPage onLaunch={() => setHasLaunched(true)} />;
+  }
+
   return (
     // Changed h-screen to h-[100dvh] to fix mobile address bar issue
     <div className="h-[100dvh] w-screen bg-black flex flex-col font-sans text-zinc-100 overflow-hidden">
@@ -42,7 +48,10 @@ const App: React.FC = () => {
         
         {/* Left: Branding */}
         <div className="flex items-center gap-3">
-          <div className="relative group cursor-default">
+          <div 
+            className="relative group cursor-pointer"
+            onClick={() => setHasLaunched(false)}
+          >
             <div className="absolute inset-0 bg-orange-500 blur-lg opacity-20 group-hover:opacity-40 transition-opacity rounded-full"></div>
             <div className="relative bg-gradient-to-br from-orange-500 to-red-600 p-1.5 lg:p-2 rounded-lg shadow-lg border border-white/10">
               <Icons.Camera className="w-4 h-4 lg:w-5 lg:h-5 text-white" />

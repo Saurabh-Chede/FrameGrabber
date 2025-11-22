@@ -27,7 +27,9 @@ import {
   Crop,
   Check,
   Keyboard,
-  MoreVertical
+  MoreVertical,
+  ArrowRight,
+  Github
 } from 'lucide-react';
 
 export const Icons = {
@@ -58,5 +60,7 @@ export const Icons = {
   Crop,
   Check,
   Keyboard,
-  MoreVertical
+  MoreVertical,
+  ArrowRight,
+  Github
 };
