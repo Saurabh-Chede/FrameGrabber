@@ -20,10 +20,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLaunch }) => {
   }, []);
 
   return (
-    <div className="min-h-[100dvh] w-full bg-zinc-950 text-zinc-100 flex flex-col font-sans selection:bg-orange-900 selection:text-orange-100 overflow-x-hidden">
+    <div className="h-[100dvh] w-full bg-zinc-950 text-zinc-100 flex flex-col font-sans selection:bg-orange-900 selection:text-orange-100 overflow-x-hidden overflow-y-auto">
       
       {/* Navigation */}
-      <nav className="w-full max-w-7xl mx-auto px-4 sm:px-6 h-16 sm:h-24 flex items-center justify-between relative z-50">
+      <nav className="w-full max-w-7xl mx-auto px-4 sm:px-6 h-16 sm:h-24 flex items-center justify-between relative z-50 shrink-0">
         <div className="flex items-center gap-3">
             <div className="relative group cursor-pointer" onClick={onLaunch}>
                 <div className="absolute inset-0 bg-orange-500 blur-lg opacity-20 group-hover:opacity-40 transition-opacity rounded-full"></div>
@@ -174,7 +174,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLaunch }) => {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-zinc-900 bg-zinc-950 py-8 sm:py-16 relative z-20">
+      <footer className="border-t border-zinc-900 bg-zinc-950 py-8 sm:py-16 relative z-20 shrink-0">
          <div className="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
             
             <div className="flex flex-col gap-4 w-full md:w-auto">
