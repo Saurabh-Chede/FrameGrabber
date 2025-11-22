@@ -112,8 +112,47 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLaunch }) => {
                     PRESS <span className="border border-zinc-700 px-1.5 py-0.5 rounded bg-zinc-900 text-zinc-300">SPACE</span> TO PLAY &bull; <span className="border border-zinc-700 px-1.5 py-0.5 rounded bg-zinc-900 text-zinc-300">S</span> TO SNAPSHOT
                 </p>
             </div>
-
       </main>
+
+      <footer className="border-t border-zinc-900 bg-zinc-950 py-16 relative z-20">
+         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
+            
+            <div className="flex flex-col gap-4 w-full md:w-auto">
+                <div className="flex items-center gap-3">
+                    <div className="relative group">
+                        <div className="absolute inset-0 bg-orange-500 blur-lg opacity-20 rounded-full"></div>
+                        <div className="relative bg-gradient-to-br from-orange-500 to-red-600 p-1.5 rounded-lg border border-white/10">
+                            <Icons.Camera className="w-4 h-4 text-white" />
+                        </div>
+                    </div>
+                    <span className="text-lg font-bold tracking-tight text-zinc-100">FrameGrabber</span>
+                </div>
+                <p className="text-zinc-500 text-sm max-w-xs">
+                    The privacy-first video screenshot tool for content creators, developers, and designers.
+                </p>
+                <div className="text-zinc-600 text-xs mt-4">
+                    © {new Date().getFullYear()} FrameGrabber. MIT License.
+                </div>
+            </div>
+
+            <div className="flex gap-12 w-full md:w-auto justify-start md:justify-end">
+                <div className="flex flex-col gap-4">
+                    <h4 className="text-sm font-bold text-zinc-100 uppercase tracking-wider">Product</h4>
+                    <a href="#" onClick={(e) => { e.preventDefault(); onLaunch(); }} className="text-zinc-400 hover:text-orange-500 text-sm transition-colors">Launch Editor</a>
+                    <a href="https://github.com/Saurabh-Chede/FrameGrabber" target="_blank" className="text-zinc-400 hover:text-orange-500 text-sm transition-colors">Source Code</a>
+                    <span className="text-zinc-600 text-sm cursor-not-allowed">Changelog</span>
+                </div>
+                <div className="flex flex-col gap-4">
+                    <h4 className="text-sm font-bold text-zinc-100 uppercase tracking-wider">Connect</h4>
+                    <a href="https://github.com/Saurabh-Chede/FrameGrabber" target="_blank" className="text-zinc-400 hover:text-orange-500 text-sm transition-colors flex items-center gap-2">
+                        <Icons.Github className="w-4 h-4" /> GitHub
+                    </a>
+                    <a href="https://twitter.com" target="_blank" className="text-zinc-400 hover:text-orange-500 text-sm transition-colors">Twitter</a>
+                </div>
+            </div>
+
+         </div>
+      </footer>
     </div>
   );
 };
