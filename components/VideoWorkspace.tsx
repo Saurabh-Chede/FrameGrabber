@@ -19,6 +19,10 @@ export const VideoWorkspace: React.FC = () => {
   const [currentTime, setCurrentTime] = useState(0);
   const [playbackRate, setPlaybackRate] = useState(1);
   
+  // URL Input State
+  const [urlInput, setUrlInput] = useState('');
+  const [isLoadingUrl, setIsLoadingUrl] = useState(false);
+  
   // Auto capture state
   const [isAutoCapturing, setIsAutoCapturing] = useState(false);
   const [captureIntervalMs, setCaptureIntervalMs] = useState(2000);
@@ -60,6 +64,53 @@ export const VideoWorkspace: React.FC = () => {
     }
   };
 
+  const handleUrlLoad = async () => {
+    if (!urlInput.trim()) return;
+    setIsLoadingUrl(true);
+    
+    const tempVideo = document.createElement('video');
+    tempVideo.crossOrigin = "anonymous";
+    tempVideo.preload = 'metadata';
+    
+    try {
+      tempVideo.src = urlInput;
+      await new Promise((resolve, reject) => {
+         tempVideo.onloadedmetadata = resolve;
+         tempVideo.onerror = () => reject(new Error('Video load failed'));
+      });
+
+      // Extract name from URL
+      let videoName = "Remote Video";
+      try {
+         const pathname = new URL(urlInput).pathname;
+         const name = pathname.split('/').pop();
+         if (name) videoName = name;
+      } catch (e) { /* ignore */ }
+
+      setVideoMeta({
+        name: videoName,
+        duration: tempVideo.duration,
+        url: urlInput,
+        width: tempVideo.videoWidth,
+        height: tempVideo.videoHeight
+      });
+      
+      // Reset states
+      setIsPlaying(false);
+      setCurrentTime(0);
+      setIsAutoCapturing(false);
+      setPlaybackRate(1);
+      setUrlInput('');
+      
+    } catch (error) {
+      console.error(error);
+      alert("Failed to load video. Please check the URL or CORS permissions.");
+    } finally {
+      setIsLoadingUrl(false);
+      tempVideo.remove();
+    }
+  };
+
   const captureFrame = useCallback(() => {
     const video = videoRef.current;
     const canvas = canvasRef.current;
@@ -75,15 +126,20 @@ export const VideoWorkspace: React.FC = () => {
     
     const ctx = canvas.getContext('2d', { alpha: false }); // optimize: no alpha needed for video
     if (ctx) {
-      // Draw synchronous
-      ctx.drawImage(video, 0, 0, sWidth, sHeight);
-      
-      // Export asynchronous (ToBlob) - Moves encoding off main thread (mostly)
-      canvas.toBlob((blob) => {
-        if (blob) {
-          addScreenshot(blob, video.currentTime, sWidth, sHeight);
-        }
-      }, 'image/png');
+      try {
+        // Draw synchronous
+        ctx.drawImage(video, 0, 0, sWidth, sHeight);
+        
+        // Export asynchronous (ToBlob) - Moves encoding off main thread (mostly)
+        canvas.toBlob((blob) => {
+          if (blob) {
+            addScreenshot(blob, video.currentTime, sWidth, sHeight);
+          }
+        }, 'image/png');
+      } catch (e) {
+        console.error("Security Error: Canvas tainted by cross-origin video", e);
+        alert("Cannot capture screenshot: This video is protected by CORS policy.");
+      }
     }
   }, [addScreenshot]);
 
@@ -244,7 +300,8 @@ export const VideoWorkspace: React.FC = () => {
       {/* Video Player Area - Fixed Aspect on Desktop, but flexible enough */}
       <div className="relative bg-black w-full aspect-video lg:shrink-0 flex items-center justify-center group overflow-hidden border-b border-zinc-800">
         {!videoMeta ? (
-          <div className="text-center p-8 z-10 animate-fade-in flex flex-col items-center">
+          <div className="text-center p-8 z-10 animate-fade-in flex flex-col items-center max-w-md w-full">
+            {/* File Upload Section */}
             <button 
                onClick={() => fileInputRef.current?.click()}
                className="w-16 h-16 bg-zinc-900 hover:bg-zinc-800 rounded-full flex items-center justify-center mb-4 border border-zinc-800 hover:border-orange-500/50 shadow-xl hover:shadow-orange-500/10 transition-all duration-300 group-hover:scale-105 active:scale-95 cursor-pointer group/btn"
@@ -252,14 +309,44 @@ export const VideoWorkspace: React.FC = () => {
             >
               <Icons.Upload className="w-6 h-6 text-zinc-500 group-hover/btn:text-orange-500 transition-colors" />
             </button>
-            <h3 className="text-lg font-bold text-zinc-100 mb-2">Upload Video</h3>
-            <p className="text-zinc-500 text-xs lg:text-sm max-w-[240px] mx-auto">MP4, WebM, or Ogg supported</p>
+            <h3 className="text-lg font-bold text-zinc-100 mb-1">Upload Video</h3>
+            <p className="text-zinc-500 text-xs lg:text-sm mb-6">MP4, WebM, or Ogg supported</p>
+
+            {/* Divider */}
+            <div className="flex items-center w-full gap-3 mb-6 opacity-50">
+                <div className="h-px bg-zinc-800 flex-1"></div>
+                <span className="text-zinc-600 text-[10px] font-bold uppercase tracking-wider">OR</span>
+                <div className="h-px bg-zinc-800 flex-1"></div>
+            </div>
+
+            {/* URL Input Section */}
+            <div className="flex w-full gap-2">
+                <div className="flex-1 bg-zinc-900 rounded-lg border border-zinc-800 focus-within:border-orange-500/50 transition-colors flex items-center px-3">
+                    <Icons.Link className="w-3.5 h-3.5 text-zinc-500 mr-2 shrink-0" />
+                    <input 
+                        type="text" 
+                        placeholder="Paste video URL..." 
+                        value={urlInput}
+                        onChange={(e) => setUrlInput(e.target.value)}
+                        onKeyDown={(e) => e.key === 'Enter' && handleUrlLoad()}
+                        className="bg-transparent w-full h-10 text-xs sm:text-sm text-white focus:outline-none placeholder:text-zinc-600"
+                    />
+                </div>
+                <button 
+                    onClick={handleUrlLoad}
+                    disabled={!urlInput || isLoadingUrl}
+                    className="bg-zinc-800 hover:bg-zinc-700 text-zinc-200 px-4 rounded-lg font-bold text-xs transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center min-w-[4rem]"
+                >
+                    {isLoadingUrl ? <Icons.Loader className="w-4 h-4 animate-spin text-orange-500" /> : 'Load'}
+                </button>
+            </div>
           </div>
         ) : (
           <>
             <video
               ref={videoRef}
               src={videoMeta.url}
+              crossOrigin="anonymous"
               className="w-full h-full object-contain"
               onEnded={handleEnded}
               onClick={togglePlay}
@@ -347,9 +434,9 @@ export const VideoWorkspace: React.FC = () => {
           </>
         )}
 
-        {/* Capture Tools */}
+        {/* Capture Tools - Only visible if video is loaded */}
+        {videoMeta && (
         <div className="p-4 space-y-4 shrink-0">
-          {videoMeta ? (
             <div className="grid grid-cols-2 gap-3">
               <button
                 onClick={captureFrame}
@@ -391,12 +478,8 @@ export const VideoWorkspace: React.FC = () => {
                  </button>
               </div>
             </div>
-          ) : (
-            <div className="h-40 flex items-center justify-center text-zinc-700 text-xs font-bold uppercase tracking-wider animate-pulse">
-               Waiting for video...
-            </div>
-          )}
         </div>
+        )}
 
         {/* Studio Extras Panel - Fills Empty Space */}
         <div className="flex-1 flex flex-col border-t border-zinc-800/50 bg-zinc-900/20 min-h-[200px]">
