@@ -58,7 +58,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLaunch }) => {
       </nav>
 
       {/* Hero Section */}
-      <main className="flex-1 flex flex-col items-center justify-center px-4 sm:px-6 pb-12 sm:pb-20 text-center relative w-full max-w-[100vw]">
+      <main className="flex-1 flex flex-col items-center justify-center px-4 sm:px-6 pt-32 sm:pt-40 pb-12 sm:pb-20 text-center relative w-full max-w-[100vw]">
         
         {/* Background Gradients */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] sm:w-[600px] sm:h-[600px] lg:w-[800px] lg:h-[800px] bg-orange-600/10 blur-[60px] sm:blur-[100px] lg:blur-[120px] rounded-full pointer-events-none"></div>
@@ -147,7 +147,9 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLaunch }) => {
                     <a href="https://github.com/Saurabh-Chede/FrameGrabber" target="_blank" className="text-zinc-400 hover:text-orange-500 text-sm transition-colors flex items-center gap-2">
                         <Icons.Github className="w-4 h-4" /> GitHub
                     </a>
-                    <a href="https://twitter.com" target="_blank" className="text-zinc-400 hover:text-orange-500 text-sm transition-colors">Twitter</a>
+                    <a href="https://twitter.com" target="_blank" className="text-zinc-400 hover:text-orange-500 text-sm transition-colors flex items-center gap-2">
+                        <Icons.Twitter className="w-4 h-4" /> Twitter
+                    </a>
                 </div>
             </div>
 
