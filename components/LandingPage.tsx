@@ -58,13 +58,13 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLaunch }) => {
       </nav>
 
       {/* Hero Section */}
-      <main className="flex-1 flex flex-col items-center justify-center px-4 sm:px-6 pt-24 pb-24 sm:pt-28 sm:pb-32 lg:pt-20 lg:pb-40 text-center relative w-full max-w-[100vw]">
+      <main className="flex-1 flex flex-col items-center justify-center px-4 sm:px-6 pt-32 pb-24 sm:pt-40 sm:pb-32 lg:pt-48 lg:pb-40 text-center relative w-full max-w-[100vw]">
         
         {/* Background Gradients */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] sm:w-[600px] sm:h-[600px] lg:w-[800px] lg:h-[800px] bg-orange-600/10 blur-[60px] sm:blur-[100px] lg:blur-[120px] rounded-full pointer-events-none"></div>
 
         {/* Badge */}
-        <div className="mb-6 sm:mb-8 animate-fade-in relative z-10">
+        <div className="mb-8 sm:mb-10 animate-fade-in relative z-10">
             <div className="inline-flex items-center gap-2 bg-zinc-900/80 border border-zinc-800 rounded-full pl-1 pr-3 py-1 hover:border-orange-500/30 transition-colors cursor-default backdrop-blur-sm">
                 <div className="bg-zinc-800 rounded-full px-2 py-0.5">
                     <span className="text-[9px] sm:text-[10px] font-bold text-white uppercase tracking-wide">Privacy First</span>
@@ -77,7 +77,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLaunch }) => {
         </div>
 
         {/* Headline */}
-        <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter text-white mb-6 sm:mb-8 relative z-10 max-w-5xl mx-auto leading-[0.95] sm:leading-[0.9]">
+        <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter text-white mb-8 sm:mb-10 relative z-10 max-w-5xl mx-auto leading-[0.95] sm:leading-[0.9]">
           Extract perfect frames <br className="hidden sm:block" />
           <span className="text-zinc-500 font-medium italic">with</span> <span className="text-transparent bg-clip-text bg-gradient-to-b from-orange-400 to-orange-600 relative inline-block">
              FrameGrabber
@@ -86,7 +86,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLaunch }) => {
         </h1>
 
         {/* Subheadline */}
-        <p className="text-base sm:text-lg md:text-xl text-zinc-400 max-w-2xl mx-auto mb-8 sm:mb-12 leading-relaxed relative z-10 px-2">
+        <p className="text-base sm:text-lg md:text-xl text-zinc-400 max-w-2xl mx-auto mb-10 sm:mb-14 leading-relaxed relative z-10 px-2">
           A professional in-browser tool to extract 4K screenshots from your videos. 
           Frame-by-frame control, instant cropping, and zero server uploads. 
           Built for creators and developers.
@@ -107,7 +107,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLaunch }) => {
             </button>
         </div>
 
-        <div className="mt-16 opacity-40 hover:opacity-100 transition-opacity duration-500 relative z-10">
+        <div className="mt-20 opacity-40 hover:opacity-100 transition-opacity duration-500 relative z-10">
             <p className="text-[10px] text-zinc-500 font-mono tracking-widest">
                 PRESS <span className="border border-zinc-700 px-1.5 py-0.5 rounded bg-zinc-900 text-zinc-300">SPACE</span> TO PLAY &bull; <span className="border border-zinc-700 px-1.5 py-0.5 rounded bg-zinc-900 text-zinc-300">S</span> TO SNAPSHOT
             </p>
@@ -147,7 +147,9 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLaunch }) => {
                     <a href="https://github.com/Saurabh-Chede/FrameGrabber" target="_blank" className="text-zinc-400 hover:text-orange-500 text-sm transition-colors flex items-center gap-2">
                         <Icons.Github className="w-4 h-4" /> GitHub
                     </a>
-                    <a href="https://twitter.com" target="_blank" className="text-zinc-400 hover:text-orange-500 text-sm transition-colors">Twitter</a>
+                    <a href="https://twitter.com" target="_blank" className="text-zinc-400 hover:text-orange-500 text-sm transition-colors flex items-center gap-2">
+                        <Icons.Twitter className="w-4 h-4" /> Twitter
+                    </a>
                 </div>
             </div>
 
