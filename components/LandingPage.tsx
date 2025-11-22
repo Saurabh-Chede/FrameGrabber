@@ -20,7 +20,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLaunch }) => {
   }, []);
 
   return (
-    <div className="min-h-[100dvh] w-full bg-zinc-950 text-zinc-100 flex flex-col font-sans selection:bg-orange-900 selection:text-orange-100 overflow-x-hidden">
+    <div className="min-h-[100vh] w-full bg-zinc-950 text-zinc-100 flex flex-col font-sans selection:bg-orange-900 selection:text-orange-100 overflow-x-hidden">
       
       {/* Navigation */}
       <nav className="w-full max-w-7xl mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between relative z-50">
