@@ -26,7 +26,8 @@ import {
   Timer,
   Crop,
   Check,
-  Keyboard
+  Keyboard,
+  MoreVertical
 } from 'lucide-react';
 
 export const Icons = {
@@ -56,5 +57,6 @@ export const Icons = {
   Timer,
   Crop,
   Check,
-  Keyboard
+  Keyboard,
+  MoreVertical
 };

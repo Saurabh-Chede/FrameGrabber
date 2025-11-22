@@ -36,7 +36,7 @@ const LazyImage: React.FC<{
   }, []);
 
   return (
-    <div ref={imgRef} className="w-full h-full relative bg-zinc-900 overflow-hidden">
+    <div ref={imgRef} className="w-full h-full relative bg-zinc-900">
       {!isVisible ? (
         <div className="absolute inset-0 flex items-center justify-center bg-zinc-900">
            <div className="w-full h-full animate-pulse bg-zinc-800/50" />
@@ -59,13 +59,39 @@ const LazyImage: React.FC<{
   );
 };
 
-export const ScreenshotGallery: React.FC<ScreenshotGalleryProps> = ({ onClear, onImageSelect }) => {
-  const screenshots = useAppStore((state) => state.screenshots);
-  const selectedId = useAppStore((state) => state.selectedScreenshotId);
-  const selectScreenshot = useAppStore((state) => state.selectScreenshot);
-  const deleteScreenshot = useAppStore((state) => state.deleteScreenshot);
+interface GalleryItemProps {
+  screenshot: Screenshot;
+  isSelected: boolean;
+  onSelect: () => void;
+  onDelete: () => void;
+}
 
-  const downloadImage = (e: React.MouseEvent, screenshot: Screenshot) => {
+const GalleryItem: React.FC<GalleryItemProps> = ({ screenshot, isSelected, onSelect, onDelete }) => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  // Close menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setIsMenuOpen(false);
+      }
+    };
+
+    if (isMenuOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isMenuOpen]);
+
+  const toggleMenu = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsMenuOpen(!isMenuOpen);
+  };
+
+  const handleDownload = (e: React.MouseEvent) => {
     e.stopPropagation();
     const link = document.createElement('a');
     link.href = screenshot.url;
@@ -73,12 +99,85 @@ export const ScreenshotGallery: React.FC<ScreenshotGalleryProps> = ({ onClear, o
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+    setIsMenuOpen(false);
   };
 
-  const handleDelete = (e: React.MouseEvent, id: string) => {
+  const handleDelete = (e: React.MouseEvent) => {
     e.stopPropagation();
-    deleteScreenshot(id);
+    onDelete();
   };
+
+  return (
+    <div 
+      onClick={onSelect}
+      className={`group relative aspect-video bg-zinc-900 rounded-lg border-2 transition-all cursor-pointer will-change-transform ${
+        isSelected 
+          ? 'border-orange-500 ring-2 ring-orange-500/20 z-10' 
+          : 'border-zinc-800 hover:border-zinc-600'
+      }`}
+    >
+      {/* Image Wrapper - Clipped */}
+      <div className="absolute inset-0 rounded-[6px] overflow-hidden">
+        <LazyImage 
+          src={screenshot.url} 
+          alt={`Frame at ${screenshot.timestamp}`} 
+          className="w-full h-full object-cover"
+        />
+      </div>
+
+      {/* Menu Trigger */}
+      <div className="absolute top-1.5 right-1.5 z-30">
+        <button 
+          onClick={toggleMenu}
+          className={`p-1 rounded-full backdrop-blur-md border transition-all shadow-sm ${
+            isMenuOpen 
+              ? 'bg-zinc-800 text-white border-zinc-600' 
+              : 'bg-black/30 text-zinc-300 border-white/10 hover:bg-black/50 hover:text-white'
+          }`}
+        >
+          <Icons.MoreVertical className="w-3.5 h-3.5" />
+        </button>
+
+        {/* Dropdown Menu */}
+        {isMenuOpen && (
+          <div 
+            ref={menuRef}
+            className="absolute top-full right-0 mt-1 w-32 bg-zinc-900 border border-zinc-800 rounded-lg shadow-xl overflow-hidden z-40 animate-fade-in"
+          >
+            <button 
+              onClick={handleDownload}
+              className="flex items-center gap-2 w-full px-3 py-2.5 hover:bg-zinc-800 text-zinc-300 hover:text-white text-xs transition-colors text-left"
+            >
+              <Icons.Download className="w-3.5 h-3.5" /> Download
+            </button>
+            <div className="h-px bg-zinc-800 mx-1"></div>
+            <button 
+              onClick={handleDelete}
+              className="flex items-center gap-2 w-full px-3 py-2.5 hover:bg-red-900/20 text-zinc-300 hover:text-red-400 text-xs transition-colors text-left"
+            >
+              <Icons.Trash2 className="w-3.5 h-3.5" /> Delete
+            </button>
+          </div>
+        )}
+      </div>
+
+      {/* Timestamp Tag */}
+      <div className="absolute bottom-1 right-1 pointer-events-none z-20">
+         <div className={`px-1.5 py-0.5 text-[9px] font-mono font-bold rounded-sm backdrop-blur-md shadow-sm ${
+           isSelected ? 'bg-orange-600/90 text-white' : 'bg-black/60 text-zinc-300'
+         }`}>
+            {screenshot.timestamp.toFixed(2)}s
+         </div>
+      </div>
+    </div>
+  );
+};
+
+export const ScreenshotGallery: React.FC<ScreenshotGalleryProps> = ({ onClear, onImageSelect }) => {
+  const screenshots = useAppStore((state) => state.screenshots);
+  const selectedId = useAppStore((state) => state.selectedScreenshotId);
+  const selectScreenshot = useAppStore((state) => state.selectScreenshot);
+  const deleteScreenshot = useAppStore((state) => state.deleteScreenshot);
 
   const handleSelect = (id: string) => {
     selectScreenshot(id);
@@ -111,53 +210,15 @@ export const ScreenshotGallery: React.FC<ScreenshotGalleryProps> = ({ onClear, o
           </div>
         ) : (
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 gap-2">
-            {screenshots.map((shot) => {
-              const isSelected = selectedId === shot.id;
-              return (
-                <div 
-                  key={shot.id} 
-                  onClick={() => handleSelect(shot.id)}
-                  className={`group relative aspect-video bg-zinc-900 overflow-hidden rounded-lg border-2 transition-all cursor-pointer will-change-transform ${
-                    isSelected 
-                      ? 'border-orange-500 ring-2 ring-orange-500/20 z-10' 
-                      : 'border-zinc-800 hover:border-zinc-600'
-                  }`}
-                >
-                  <LazyImage 
-                    src={shot.url} 
-                    alt={`Frame at ${shot.timestamp}`} 
-                    className="w-full h-full object-cover"
-                  />
-                  
-                  {/* Actions Overlay */}
-                  <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2 backdrop-blur-[1px]">
-                    <button 
-                      onClick={(e) => downloadImage(e, shot)}
-                      className="p-1.5 bg-white text-black rounded hover:scale-110 transition-transform"
-                      title="Download"
-                    >
-                      <Icons.Download className="w-3.5 h-3.5" />
-                    </button>
-                    <button 
-                      onClick={(e) => handleDelete(e, shot.id)}
-                      className="p-1.5 bg-red-500 text-white rounded hover:scale-110 transition-transform"
-                      title="Delete"
-                    >
-                      <Icons.Trash2 className="w-3.5 h-3.5" />
-                    </button>
-                  </div>
-
-                  {/* Timestamp Tag */}
-                  <div className="absolute bottom-1 right-1 pointer-events-none">
-                     <div className={`px-1.5 py-0.5 text-[9px] font-mono font-bold rounded-sm backdrop-blur-md ${
-                       isSelected ? 'bg-orange-600/90 text-white' : 'bg-black/60 text-zinc-300'
-                     }`}>
-                        {shot.timestamp.toFixed(2)}s
-                     </div>
-                  </div>
-                </div>
-              );
-            })}
+            {screenshots.map((shot) => (
+              <GalleryItem
+                key={shot.id}
+                screenshot={shot}
+                isSelected={selectedId === shot.id}
+                onSelect={() => handleSelect(shot.id)}
+                onDelete={() => deleteScreenshot(shot.id)}
+              />
+            ))}
           </div>
         )}
       </div>
