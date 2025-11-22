@@ -58,7 +58,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLaunch }) => {
       </nav>
 
       {/* Hero Section */}
-      <main className="flex-1 flex flex-col items-center justify-center px-4 sm:px-6 pt-32 pb-24 sm:pt-40 sm:pb-32 lg:pt-48 lg:pb-40 text-center relative w-full max-w-[100vw]">
+      <main className="flex-1 flex flex-col items-center justify-center px-4 sm:px-6 pt-16 pb-24 sm:pt-20 sm:pb-32 lg:pt-24 lg:pb-40 text-center relative w-full max-w-[100vw]">
         
         {/* Background Gradients */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] sm:w-[600px] sm:h-[600px] lg:w-[800px] lg:h-[800px] bg-orange-600/10 blur-[60px] sm:blur-[100px] lg:blur-[120px] rounded-full pointer-events-none"></div>
