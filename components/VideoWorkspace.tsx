@@ -45,7 +45,8 @@ export const VideoWorkspace: React.FC = () => {
           duration: tempVideo.duration,
           url: url,
           width: tempVideo.videoWidth,
-          height: tempVideo.videoHeight
+          height: tempVideo.videoHeight,
+          crossOrigin: undefined
         });
         // Clean up temp element
         tempVideo.remove();
@@ -67,48 +68,92 @@ export const VideoWorkspace: React.FC = () => {
   const handleUrlLoad = async () => {
     if (!urlInput.trim()) return;
     setIsLoadingUrl(true);
-    
-    const tempVideo = document.createElement('video');
-    tempVideo.crossOrigin = "anonymous";
-    tempVideo.preload = 'metadata';
-    
+
+    // Determine potential name
+    let videoName = "Remote Video";
     try {
-      tempVideo.src = urlInput;
-      await new Promise((resolve, reject) => {
-         tempVideo.onloadedmetadata = resolve;
-         tempVideo.onerror = () => reject(new Error('Video load failed'));
-      });
+        const pathname = new URL(urlInput).pathname;
+        const name = pathname.split('/').pop();
+        if (name) videoName = name;
+    } catch (e) { /* ignore */ }
+    
+    // Helper to attempt loading
+    const loadAttempt = (url: string, cors?: "anonymous"): Promise<HTMLVideoElement> => {
+        return new Promise((resolve, reject) => {
+            const v = document.createElement('video');
+            if (cors) v.crossOrigin = cors;
+            v.preload = 'metadata';
+            v.src = url;
+            
+            const onLoaded = () => {
+                cleanup();
+                resolve(v);
+            };
+            const onError = () => {
+                cleanup();
+                reject(new Error(`Failed to load with cors=${cors}`));
+            };
+            const cleanup = () => {
+                v.removeEventListener('loadedmetadata', onLoaded);
+                v.removeEventListener('error', onError);
+            };
 
-      // Extract name from URL
-      let videoName = "Remote Video";
-      try {
-         const pathname = new URL(urlInput).pathname;
-         const name = pathname.split('/').pop();
-         if (name) videoName = name;
-      } catch (e) { /* ignore */ }
+            v.addEventListener('loadedmetadata', onLoaded);
+            v.addEventListener('error', onError);
+        });
+    };
 
+    try {
+      // Attempt 1: Try loading WITH CORS (Preferred for screenshots)
+      const vid = await loadAttempt(urlInput, "anonymous");
+      
       setVideoMeta({
         name: videoName,
-        duration: tempVideo.duration,
+        duration: vid.duration,
         url: urlInput,
-        width: tempVideo.videoWidth,
-        height: tempVideo.videoHeight
+        width: vid.videoWidth,
+        height: vid.videoHeight,
+        crossOrigin: "anonymous"
       });
+      vid.remove();
+      resetPlayerState();
+      setUrlInput('');
+
+    } catch (error) {
+      console.warn("CORS load failed, attempting fallback to non-CORS...", error);
       
-      // Reset states
+      // Attempt 2: Try loading WITHOUT CORS (Fallback for playback)
+      try {
+          const vidFallback = await loadAttempt(urlInput, undefined);
+          
+          setVideoMeta({
+            name: videoName,
+            duration: vidFallback.duration,
+            url: urlInput,
+            width: vidFallback.videoWidth,
+            height: vidFallback.videoHeight,
+            crossOrigin: undefined
+          });
+          vidFallback.remove();
+          resetPlayerState();
+          setUrlInput('');
+          
+          // Optional: We could show a toast here warning about screenshot limitations
+
+      } catch (fallbackError) {
+          console.error("All load attempts failed", fallbackError);
+          alert("Failed to load video. Please check the URL or ensure the server allows access.");
+      }
+    } finally {
+      setIsLoadingUrl(false);
+    }
+  };
+
+  const resetPlayerState = () => {
       setIsPlaying(false);
       setCurrentTime(0);
       setIsAutoCapturing(false);
       setPlaybackRate(1);
-      setUrlInput('');
-      
-    } catch (error) {
-      console.error(error);
-      alert("Failed to load video. Please check the URL or CORS permissions.");
-    } finally {
-      setIsLoadingUrl(false);
-      tempVideo.remove();
-    }
   };
 
   const captureFrame = useCallback(() => {
@@ -131,6 +176,7 @@ export const VideoWorkspace: React.FC = () => {
         ctx.drawImage(video, 0, 0, sWidth, sHeight);
         
         // Export asynchronous (ToBlob) - Moves encoding off main thread (mostly)
+        // IMPORTANT: If canvas is tainted (non-CORS video), toBlob will throw SecurityError
         canvas.toBlob((blob) => {
           if (blob) {
             addScreenshot(blob, video.currentTime, sWidth, sHeight);
@@ -138,7 +184,7 @@ export const VideoWorkspace: React.FC = () => {
         }, 'image/png');
       } catch (e) {
         console.error("Security Error: Canvas tainted by cross-origin video", e);
-        alert("Cannot capture screenshot: This video is protected by CORS policy.");
+        alert("Cannot capture screenshot: This video is protected by CORS policy and cannot be processed by the browser.");
       }
     }
   }, [addScreenshot]);
@@ -346,7 +392,7 @@ export const VideoWorkspace: React.FC = () => {
             <video
               ref={videoRef}
               src={videoMeta.url}
-              crossOrigin="anonymous"
+              crossOrigin={videoMeta.crossOrigin}
               className="w-full h-full object-contain"
               onEnded={handleEnded}
               onClick={togglePlay}

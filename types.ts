@@ -13,6 +13,7 @@ export interface VideoMeta {
   url: string;
   width: number;
   height: number;
+  crossOrigin?: "anonymous";
 }
 
 export enum CaptureMode {
