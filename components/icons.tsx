@@ -29,8 +29,7 @@ import {
   Keyboard,
   MoreVertical,
   ArrowRight,
-  Github,
-  Link
+  Github
 } from 'lucide-react';
 
 export const Icons = {
@@ -63,6 +62,5 @@ export const Icons = {
   Keyboard,
   MoreVertical,
   ArrowRight,
-  Github,
-  Link
+  Github
 };

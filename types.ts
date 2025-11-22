@@ -13,9 +13,6 @@ export interface VideoMeta {
   url: string;
   width: number;
   height: number;
-  crossOrigin?: "anonymous";
-  type?: 'native' | 'youtube';
-  youtubeId?: string;
 }
 
 export enum CaptureMode {
