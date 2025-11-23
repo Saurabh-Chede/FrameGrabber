@@ -58,7 +58,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLaunch }) => {
       </nav>
 
       {/* Hero Section */}
-      <main className="flex-1 flex flex-col items-center justify-center px-4 py-5 sm:px-6 lg:py-8 xl:py-8 lg:scale-0.9 text-center relative w-full max-w-[100vw]">
+      <main className="flex-1 flex flex-col items-center justify-center px-4 pt-32 pb-20 sm:pt-40 sm:pb-32 lg:pt-48 lg:pb-40 text-center relative w-full max-w-[100vw]">
         
         {/* Background Gradients */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] sm:w-[600px] sm:h-[600px] lg:w-[800px] lg:h-[800px] bg-orange-600/10 blur-[60px] sm:blur-[100px] lg:blur-[120px] rounded-full pointer-events-none"></div>
@@ -77,7 +77,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLaunch }) => {
         </div>
 
         {/* Headline */}
-        <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter text-white mb-8 sm:mb-10 relative z-10 max-w-5xl mx-auto leading-[0.95] sm:leading-[0.9]">
+        <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tighter text-white mb-8 sm:mb-12 relative z-10 max-w-6xl mx-auto leading-[0.9] sm:leading-[0.9] text-balance">
           Extract perfect frames <br className="hidden sm:block" />
           <span className="text-zinc-500 font-medium italic">with</span> <span className="text-transparent bg-clip-text bg-gradient-to-b from-orange-400 to-orange-600 relative inline-block">
              FrameGrabber
@@ -86,7 +86,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLaunch }) => {
         </h1>
 
         {/* Subheadline */}
-        <p className="text-base sm:text-lg md:text-xl text-zinc-400 max-w-2xl mx-auto mb-10 sm:mb-14 leading-relaxed relative z-10 px-2">
+        <p className="text-lg sm:text-xl md:text-2xl text-zinc-400 max-w-3xl mx-auto mb-12 sm:mb-16 leading-relaxed relative z-10 px-4 text-balance">
           A professional in-browser tool to extract 4K screenshots from your videos. 
           Frame-by-frame control, instant cropping, and zero server uploads. 
           Built for creators and developers.
@@ -96,13 +96,13 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLaunch }) => {
         <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4 relative z-10 w-full sm:w-auto">
             <button 
                 onClick={onLaunch}
-                className="h-12 sm:h-14 w-full sm:w-auto px-8 rounded-full bg-orange-500 hover:bg-orange-400 text-zinc-950 font-bold text-base sm:text-lg transition-all hover:scale-105 active:scale-95 flex items-center justify-center gap-2 shadow-[0_0_40px_-10px_rgba(249,115,22,0.4)]"
+                className="h-12 sm:h-14 md:h-16 w-full sm:w-auto px-8 sm:px-10 rounded-full bg-orange-500 hover:bg-orange-400 text-zinc-950 font-bold text-base sm:text-lg md:text-xl transition-all hover:scale-105 active:scale-95 flex items-center justify-center gap-2 shadow-[0_0_40px_-10px_rgba(249,115,22,0.4)]"
             >
                 Try Now It's Free
                 <Icons.ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
             </button>
             
-            <button className="h-12 sm:h-14 w-full sm:w-auto px-8 rounded-full bg-zinc-900/50 border border-zinc-800 hover:bg-zinc-800 text-zinc-300 font-bold text-base sm:text-lg transition-all hover:border-zinc-700 flex items-center justify-center">
+            <button className="h-12 sm:h-14 md:h-16 w-full sm:w-auto px-8 sm:px-10 rounded-full bg-zinc-900/50 border border-zinc-800 hover:bg-zinc-800 text-zinc-300 font-bold text-base sm:text-lg md:text-xl transition-all hover:border-zinc-700 flex items-center justify-center">
                 View Demo
             </button>
         </div>
