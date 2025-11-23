@@ -23,7 +23,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLaunch }) => {
     <div className="h-[100dvh] w-full bg-zinc-950 text-zinc-100 flex flex-col font-sans selection:bg-orange-900 selection:text-orange-100 overflow-x-hidden overflow-y-auto">
       
       {/* Navigation */}
-      <nav className="w-full max-w-7xl mx-auto px-4 sm:px-6 h-16 sm:h-20 py-4 flex items-center justify-between relative z-50 shrink-0">
+      <nav className="w-full max-w-7xl mx-auto px-4 sm:px-6 h-16 sm:h-20 mt-4 flex items-center justify-between relative z-50 shrink-0">
         <div className="flex items-center gap-2 sm:gap-3">
             <div className="relative group cursor-pointer" onClick={onLaunch}>
                 <div className="absolute inset-0 bg-orange-500 blur-lg opacity-20 group-hover:opacity-40 transition-opacity rounded-full"></div>
